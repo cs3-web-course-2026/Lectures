@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify Playlist Clone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="album-card">
+    <header>
+      <img src="https://i.scdn.co/image/ab67616d0000e1a3274b406a7e18acebcf743079" alt="film photo of baloons in the room" />
+      <div class="album-details">
+        <label>Album</label>
+        <h1>House Of Balloons (Original)</h1>
+        <div class="additional-details">
+          <span class="artist-details">
+            <img src="https://i.scdn.co/image/ab6761610000101fc1719ac9e6a75c1c25835018" alt="weekend atius photo" />
+            <a href="/artist/1Xyo4u8uXC1ZmMpatF05PJ">The Weeknd</a>
+          </span>
+          <span>2011</span>
+          <span>9 songs, 49 min 23 sec</span>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="controls">
+        <button class="play" aria-label="Play"></button>
+        <button class="shuffle" aria-label="Shuffle"></button>
+        <button class="add-to-playlist" aria-label="Add to playlist"></button>
+        <button class="more" aria-label="More options"></button>
+      </section>
+      <section class="tracklist">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" class="col-index">#</th>
+              <th scope="col" class="col-title">Title</th>
+              <th scope="col" class="col-duration">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path
+                    d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm7.5-3.5a.5.5 0 0 1 .5.5v3.15l2.28 1.31a.5.5 0 0 1-.5.87L7.25 8.62A.5.5 0 0 1 7 8.18V5a.5.5 0 0 1 .5-.5Z" />
+                </svg>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="track">
+              <td class="col-index"><span class="track-number">1</span><button class="track-play"
+                  aria-label="Play High For This"></button></td>
+              <td class="col-title">
+                <div class="track-meta">
+                  <span class="track-name">High For This</span>
+                  <span class="track-artist">The Weeknd</span>
+                </div>
+              </td>
+              <td class="col-duration"><span class="track-time">4:09</span></td>
+            </tr>
+            <tr class="track">
+              <td class="col-index"><span class="track-number">2</span><button class="track-play"
+                  aria-label="Play What You Need"></button></td>
+              <td class="col-title">
+                <div class="track-meta">
+                  <span class="track-name">What You Need</span>
+                  <span class="track-artist">The Weeknd</span>
+                </div>
+              </td>
+              <td class="col-duration"><span class="track-time">3:26</span></td>
+            </tr>
+            <tr class="track">
+              <td class="col-index"><span class="track-number">3</span><button class="track-play"
+                  aria-label="Play House Of Balloons / Glass Table Girls"></button></td>
+              <td class="col-title">
+                <div class="track-meta">
+                  <span class="track-name">House Of Balloons / Glass Table Girls</span>
+                  <span class="track-artist"><span class="explicit" aria-label="Explicit">E</span>The Weeknd</span>
+                </div>
+              </td>
+              <td class="col-duration"><span class="track-time">6:47</span></td>
+            </tr>
+            <tr class="track">
+              <td class="col-index"><span class="track-number">4</span><button class="track-play"
+                  aria-label="Play The Morning"></button></td>
+              <td class="col-title">
+                <div class="track-meta">
+                  <span class="track-name">The Morning</span>
+                  <span class="track-artist">The Weeknd</span>
+                </div>
+              </td>
+              <td class="col-duration"><span class="track-time">5:14</span></td>
+            </tr>
+            <tr class="track">
+              <td class="col-index"><span class="track-number">5</span><button class="track-play"
+                  aria-label="Play Wicked Games"></button></td>
+              <td class="col-title">
+                <div class="track-meta">
+                  <span class="track-name">Wicked Games</span>
+                  <span class="track-artist">The Weeknd</span>
+                </div>
+              </td>
+              <td class="col-duration"><span class="track-time">5:25</span></td>
+            </tr>
+            <tr class="track">
+              <td class="col-index"><span class="track-number">6</span><button class="track-play"
+                  aria-label="Play The Party &amp; The After Party"></button></td>
+              <td class="col-title">
+                <div class="track-meta">
+                  <span class="track-name">The Party &amp; The After Party</span>
+                  <span class="track-artist"><span class="explicit" aria-label="Explicit">E</span>The Weeknd</span>
+                </div>
+              </td>
+              <td class="col-duration"><span class="track-time">7:39</span></td>
+            </tr>
+            <tr class="track">
+              <td class="col-index"><span class="track-number">7</span><button class="track-play"
+                  aria-label="Play Coming Down"></button></td>
+              <td class="col-title">
+                <div class="track-meta">
+                  <span class="track-name">Coming Down</span>
+                  <span class="track-artist">The Weeknd</span>
+                </div>
+              </td>
+              <td class="col-duration"><span class="track-time">4:55</span></td>
+            </tr>
+            <tr class="track">
+              <td class="col-index"><span class="track-number">8</span><button class="track-play"
+                  aria-label="Play Loft Music"></button></td>
+              <td class="col-title">
+                <div class="track-meta">
+                  <span class="track-name">Loft Music</span>
+                  <span class="track-artist"><span class="explicit" aria-label="Explicit">E</span>The Weeknd</span>
+                </div>
+              </td>
+              <td class="col-duration"><span class="track-time">6:03</span></td>
+            </tr>
+            <tr class="track">
+              <td class="col-index"><span class="track-number">9</span><button class="track-play"
+                  aria-label="Play The Knowing"></button></td>
+              <td class="col-title">
+                <div class="track-meta">
+                  <span class="track-name">The Knowing</span>
+                  <span class="track-artist">The Weeknd</span>
+                </div>
+              </td>
+              <td class="col-duration"><span class="track-time">5:42</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <footer class="album-footer">
+        <p class="release-date">21 March 2011</p>
+        <p>A Republic Records release.</p>
+        <p>&copy; 2011 The Weeknd XO, Inc.</p>
+        <p>&#8471; 2011 The Weeknd XO, Inc.</p>
+      </footer>
+    </main>
+  </div>
+  <script src="script.js" defer></script>
+</body>
+
+</html>
