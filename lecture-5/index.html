@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Lecture 5 - Conditionals</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main>
+    <h1>Lecture 5 · Events Playground</h1>
+
+    <section>
+      <h2>Click</h2>
+      <button id="moodBtn">🙂</button>
+    </section>
+
+    <hr>
+
+    <section>
+      <h2>Click → pickTrack() з conditionals.js</h2>
+      <button id="trackBtn">Порадь трек 🎧</button>
+      <p id="trackResult"></p>
+    </section>
+
+    <section>
+      <h2>Mouseover / mouseout → menu[] з cycles.js</h2>
+      <ul id="dishesList"></ul>
+    </section>
+
+    <section>
+      <h2>Input → countTracksDeclaration() з functions.js</h2>
+      <label>
+        Додай трек у плейлист:
+        <input id="trackInput" type="text" placeholder="Назва треку">
+      </label>
+      <p id="trackCount"></p>
+    </section>
+
+    <section>
+      <h2>Submit → pickTrack() з conditionals.js</h2>
+      <form id="moodForm">
+        <label>
+          Обери настрій:
+          <select id="moodSelect">
+            <option value="happy">happy</option>
+            <option value="sleepy" selected>sleepy</option>
+            <option value="dreamy">dreamy</option>
+            <option value="active">active</option>
+          </select>
+        </label>
+        <button type="submit">Обрати плейлист</button>
+      </form>
+      <p id="moodResult"></p>
+    </section>
+  </main>
+
+  <script src="conditionals.js"></script>
+  <script src="cycles.js"></script>
+  <script src="functions.js"></script>
+
+  <script>
+    document.getElementById("moodBtn").onclick = function() {
+      this.textContent = this.textContent === "🙂" ? "😡" : "🙂";
+    };
+
+    // click → викликаємо функцію pickTrack() з conditionals.js
+    document.getElementById("trackBtn").addEventListener("click", function () {
+      const track = pickTrack({
+        batteryLevel, isCharging, dataConnection,
+        userAge, hour, friendsOnline, isWeekend, mood,
+      });
+      document.getElementById("trackResult").textContent = track;
+    });
+
+    // mouseover / mouseout → перебираємо menu[] з cycles.js методом forEach
+    const dishesList = document.getElementById("dishesList");
+    menu.forEach((dish) => {
+      const li = document.createElement("li");
+      li.textContent = dish;
+      li.addEventListener("mouseover", () => (li.style.fontSize = "2rem"));
+      li.addEventListener("mouseout", () => (li.style.fontSize = ""));
+      dishesList.appendChild(li);
+    });
+
+    // input → на кожне натискання клавіші рахуємо довжину плейлиста
+    // countTracksDeclaration() визначена в functions.js
+    document.getElementById("trackInput").addEventListener("input", (event) => {
+      const preview = [...playlist, event.target.value].filter(Boolean);
+      document.getElementById("trackCount").textContent =
+        `Треків буде: ${countTracksDeclaration(preview)}`;
+    });
+
+    // submit → зупиняємо перезавантаження сторінки й викликаємо selectTrack()
+    // з обраним у формі настроєм замість глобального mood
+    document.getElementById("moodForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const selectedMood = document.getElementById("moodSelect").value;
+      const track = selectTrack(selectedMood);
+      document.getElementById("moodResult").textContent = track;
+    });
+  </script>
+</body>
+
+</html>
