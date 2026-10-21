@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Магічний Хамелеон</title>
+  <style>
+    :root {
+      --accent: hsl(100, 60%, 38%);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #e8f5e9, #e3f2fd);
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      padding: 32px 24px;
+      text-align: center;
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: 1.6rem;
+      line-height: 1.3;
+      color: #333;
+    }
+
+    #chameleon {
+      display: inline-block;
+      font-size: 120px;
+      line-height: 1.2;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.3s, filter 0.5s;
+    }
+
+    #chameleon:hover {
+      transform: scale(1.2) rotate(-5deg);
+    }
+
+    #chameleon:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 8px;
+      border-radius: 16px;
+    }
+
+    .chameleon-info {
+      margin: 8px 0;
+      font-size: 1.25rem;
+      color: var(--accent);
+      transition: color 0.5s;
+    }
+
+    .color-badge {
+      display: inline-block;
+      margin: 8px 0 16px;
+      padding: 4px 14px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 0.9rem;
+      color: #fff;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: background 0.5s;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    button {
+      padding: 12px 22px;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.5s, transform 0.15s, box-shadow 0.15s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    button:focus-visible {
+      outline: 3px solid #333;
+      outline-offset: 2px;
+    }
+
+    button.secondary {
+      background: #fff;
+      color: #333;
+      box-shadow: inset 0 0 0 2px var(--accent);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="card">
+    <h1>Зустрічай це <span class="chameleon-name">Паскаль</span>, Магічний Хамелеон!</h1>
+
+    <div id="chameleon" role="button" tabindex="0" aria-label="Змінити колір хамелеона">🦎</div>
+    <p class="chameleon-info">Його звати <span class="chameleon-name">Паскаль</span></p>
+    <p class="chameleon-info">Він любить змінювати колір</p>
+    <span id="color-code" class="color-badge">hsl(100, 60%, 38%)</span>
+
+    <div class="buttons">
+      <button id="color-button" type="button">Змінити колір</button>
+      <button id="name-button" type="button" class="secondary">Дати нове ім'я</button>
+    </div>
+  </main>
+
+  <script>
+    // --- Демонстрація 1: Пошук елементів ---
+
+    // Знаходимо елементи за їх ID
+    const chameleonElement = document.getElementById('chameleon');
+    const colorCodeElement = document.getElementById('color-code');
+    const colorButton = document.getElementById('color-button');
+    const nameButton = document.getElementById('name-button');
+    const nameElements = document.querySelectorAll('.chameleon-name');
+
+    // Знаходимо ВСІ елементи за класом
+    const infoElements = document.getElementsByClassName('chameleon-info');
+    console.log('Знайдені елементи з класом "chameleon-info":', infoElements);
+
+
+    // --- Демонстрація 2: Зміна контенту та стилів ---
+
+    // Базовий відтінок емодзі 🦎 (зелений) — від нього рахуємо поворот кольору
+    const BASE_HUE = 100;
+    let currentHue = BASE_HUE;
+
+    // Випадковий відтінок, помітно відмінний від поточного
+    function getRandomHue() {
+      let hue;
+      do {
+        hue = Math.floor(Math.random() * 360);
+      } while (Math.abs(hue - currentHue) < 40);
+      return hue;
+    }
+
+    function changeColor() {
+      currentHue = getRandomHue();
+      // HSL гарантує насичені кольори з читабельною яскравістю (на відміну від випадкового HEX)
+      const newColor = `hsl(${currentHue}, 60%, 38%)`;
+
+      // Емодзі — це картинка, тому CSS-властивість color на нього не діє.
+      // Натомість повертаємо його відтінок через filter.
+      chameleonElement.style.filter = `hue-rotate(${currentHue - BASE_HUE}deg)`;
+
+      // Змінюємо колір тексту для всіх елементів з класом .chameleon-info
+      for (let i = 0; i < infoElements.length; i++) {
+        infoElements[i].style.color = newColor;
+      }
+
+      // Кнопки й бейдж беруть колір із CSS-змінної
+      document.documentElement.style.setProperty('--accent', newColor);
+      colorCodeElement.textContent = newColor;
+    }
+
+    // Змінюємо ім'я хамелеона
+    function renameChameleon() {
+      const newName = prompt("Як назвемо хамелеона?", "Леон");
+      // prompt повертає null при скасуванні, тому перевіряємо і порожній рядок
+      if (newName && newName.trim()) {
+        nameElements.forEach(nameElement => {
+          nameElement.textContent = `${newName.trim()}!`
+        });
+      }
+    }
+
+
+    // --- Демонстрація 3: Обробники подій ---
+
+    colorButton.addEventListener('click', changeColor);
+    nameButton.addEventListener('click', renameChameleon);
+
+    // Клік по самому хамелеону теж змінює колір
+    chameleonElement.addEventListener('click', changeColor);
+    // Доступність: Enter / Пробіл на хамелеоні з клавіатури
+    chameleonElement.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        changeColor();
+      }
+    });
+    // Збільшення при наведенні тепер робить CSS (:hover) — без JavaScript
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Галерея Котиків</title>
+  <style>
+    :root {
+      --bg: #f4f2fb;
+      --surface: rgba(255, 255, 255, 0.72);
+      --surface-solid: #ffffff;
+      --border: rgba(120, 100, 200, 0.16);
+      --text: #1d1b2e;
+      --muted: #6b6884;
+      --accent: #ff4d94;
+      --accent-2: #7c5cff;
+      --accent-soft: rgba(255, 77, 148, 0.22);
+      --shadow: 0 24px 60px -20px rgba(60, 40, 140, 0.35);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f0d1a;
+        --surface: rgba(30, 27, 48, 0.7);
+        --surface-solid: #1c1930;
+        --border: rgba(255, 255, 255, 0.09);
+        --text: #f1effa;
+        --muted: #a29fbd;
+        --accent-soft: rgba(255, 77, 148, 0.3);
+        --shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      position: relative;
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 40px 16px;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      overflow-x: hidden;
+      transition: background 0.6s ease;
+    }
+
+    /* Світлові плями на фоні */
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      z-index: -1;
+      width: 50vmax;
+      height: 50vmax;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    body::before {
+      top: -20vmax;
+      left: -15vmax;
+      background: var(--accent);
+    }
+
+    body::after {
+      right: -15vmax;
+      bottom: -20vmax;
+      background: var(--accent-2);
+    }
+
+    .gallery-container {
+      width: 100%;
+      max-width: 860px;
+      padding: 32px;
+      background: var(--surface);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 999px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Головне фото з підписом поверх */
+    .photo-frame {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.45);
+    }
+
+    #main-photo {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      background: linear-gradient(135deg, var(--accent-soft), var(--surface-solid));
+      transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    #main-photo:hover {
+      transform: scale(1.05);
+      /* Ефект при наведенні */
+    }
+
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 40%;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
+      pointer-events: none;
+    }
+
+    #log {
+      position: absolute;
+      z-index: 1;
+      left: 16px;
+      bottom: 16px;
+      max-width: calc(100% - 32px);
+      margin: 0;
+      padding: 10px 16px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: #fff;
+      background: rgba(20, 16, 40, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+
+    /* Мініатюри */
+    .thumbnails {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .thumb {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 16px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      outline: 2px solid transparent;
+      outline-offset: 3px;
+      filter: grayscale(0.6) brightness(0.9);
+      transition: transform 0.25s ease, filter 0.25s ease, outline-color 0.25s ease;
+    }
+
+    .thumb:hover {
+      transform: translateY(-4px) scale(1.03);
+      filter: none;
+    }
+
+    .thumb.active {
+      filter: none;
+      outline-color: var(--accent);
+    }
+
+    /* Поле вводу */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 18px;
+      font: inherit;
+      font-size: 16px;
+      color: var(--text);
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input::placeholder {
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    @media (max-width: 560px) {
+      .gallery-container {
+        padding: 18px;
+        border-radius: 24px;
+      }
+
+      .thumbnails {
+        gap: 8px;
+      }
+
+      .thumb {
+        border-radius: 10px;
+      }
+
+      #log {
+        left: 10px;
+        bottom: 10px;
+        max-width: calc(100% - 20px);
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="gallery-container">
+    <header>
+      <span class="eyebrow">Лекція 8 · Події в JS</span>
+      <h1>Інтерактивна галерея <span>котиків</span></h1>
+    </header>
+
+    <div class="photo-frame">
+      <img id="main-photo" src="images/cat-1.jpg" alt="Велике фото котика">
+      <p id="log">Наведіть мишу на фото або натисніть `C` для сюрпризу</p>
+    </div>
+
+    <div class="thumbnails">
+      <img class="thumb active" src="images/cat-1.jpg" alt="Котик 1">
+      <img class="thumb" src="images/cat-2.avif" alt="Котик 2">
+      <img class="thumb" src="images/cat-3.webp" alt="Котик 3">
+      <img class="thumb" src="images/cat-4.jpeg" alt="Котик 4">
+    </div>
+
+    <div class="controls">
+      <label for="cat-name">Введіть коментар</label>
+      <input type="text" id="cat-name" placeholder="Наприклад, 'Який милий!'">
+    </div>
+  </div>
+
+  <script>
+    const mainPhoto = document.querySelector('#main-photo');
+    const thumbnails = document.querySelectorAll('.thumb');
+    const log = document.querySelector('#log');
+    const input = document.querySelector('#cat-name');
+
+    // --- Демо 1: Подія 'click' на мініатюрах ---
+    thumbnails.forEach(thumb => {
+      thumb.addEventListener('click', function (event) {
+        // event.target - це саме той елемент, на який клікнули
+        const clickedThumb = event.target;
+
+        // Міняємо головне фото
+        mainPhoto.src = clickedThumb.src;
+        log.textContent = `Ви обрали фото: ${clickedThumb.alt}`;
+
+        // Оновлюємо активний клас
+        document.querySelector('.thumb.active').classList.remove('active');
+        clickedThumb.classList.add('active');
+      });
+    });
+
+    // --- Демо 2: Події 'mouseover' та 'mouseout' на головному фото ---
+    mainPhoto.addEventListener('mouseover', function () {
+      log.textContent = 'О, ви розглядаєте цього красеня ближче!';
+    });
+
+    mainPhoto.addEventListener('mouseout', function () {
+      log.textContent = 'Наведіть мишу на фото або натисніть `C` для сюрпризу';
+    });
+
+    // --- Демо 3: Подія 'keydown' на всій сторінці ---
+    document.addEventListener('keydown', function (event) {
+      // event.key містить назву натиснутої клавіші
+      if (event.key.toLowerCase() === 'c') {
+        document.body.style.background = `hsl(${Math.random() * 360}, 100%, 90%)`;
+        log.textContent = 'Вау! Ви знайшли пасхалку і змінили колір фону!';
+      }
+    });
+
+    // --- Демо 4: Подія 'input' на полі вводу ---
+    input.addEventListener('input', function (event) {
+      // event.target.value містить поточний текст у полі
+      console.log(`Користувач друкує: ${event.target.value}`);
+      if (event.target.value) {
+        log.textContent = `Ваш коментар: "${event.target.value}"`;
+      }
+    });
+
+  </script>
+</body>
+
+</html>

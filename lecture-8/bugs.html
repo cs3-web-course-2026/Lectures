@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Bug Hunter: DOM Edition</title>
+  <style>
+    body {
+      font-family: 'Consolas', monospace;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      overflow: hidden;
+      /* Щоб баги не створювали прокрутку */
+    }
+
+    .header {
+      text-align: center;
+      padding: 20px;
+      z-index: 10;
+    }
+
+    #game-board {
+      position: relative;
+      width: 80vw;
+      height: 60vh;
+      border: 2px dashed #30363d;
+      border-radius: 15px;
+      background: #161b22;
+      overflow: hidden;
+    }
+
+    .bug {
+      position: absolute;
+      font-size: 40px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s;
+      filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+    }
+
+    .bug:hover {
+      transform: scale(1.2) rotate(10deg);
+    }
+
+    button {
+      background-color: #238636;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #2ea043;
+    }
+
+    .counter {
+      font-size: 24px;
+      color: #f85149;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>🐛 Bug Hunter v1.0</h1>
+    <p>Натискай на кнопку, щоб поповнити беклог багами. Клікай на баг, щоб "зафіксити" його!</p>
+    <button id="spawn-bug">Згенерувати баг (createElement)</button>
+    <div class="counter">Виправлено багів: <span id="score">0</span></div>
+  </div>
+
+  <div id="game-board">
+  </div>
+
+  <script>
+    const bugTypes = ["🐛", "🪲", "🐞", "👾", "🪳", "🕷️"];
+    let score = 0;
+
+    const spawnBtn = document.getElementById('spawn-bug');
+    const gameBoard = document.getElementById('game-board');
+    const scoreDisplay = document.getElementById('score');
+
+    console.dir(spawnBtn);
+
+    spawnBtn.addEventListener('click', function () {
+      // 1. Обираємо випадковий тип багу
+      const randomIcon = bugTypes[Math.floor(Math.random() * bugTypes.length)];
+
+      // 2. Створюємо новий елемент (createElement)
+      const bug = document.createElement('div');
+      bug.classList.add('bug');
+      bug.textContent = randomIcon;
+
+      // 3. Генеруємо випадкові координати всередині контейнера
+      const x = Math.random() * (gameBoard.clientWidth - 50);
+      const y = Math.random() * (gameBoard.clientHeight - 50);
+
+      bug.style.left = `${x}px`;
+      bug.style.top = `${y}px`;
+
+      // 4. Додаємо баг на ігрове поле (appendChild)
+      gameBoard.appendChild(bug);
+
+      // 5. Обробка "фіксу" багу (видалення)
+      bug.addEventListener('click', function () {
+        // Видаляємо елемент (remove)
+        bug.remove();
+
+        // Оновлюємо лічильник
+        score++;
+        scoreDisplay.textContent = score;
+
+        // Додамо трохи драйву: якщо багів нуль, міняємо колір лічильника
+        if (gameBoard.children.length === 0) {
+          scoreDisplay.style.color = "#7ee787";
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
